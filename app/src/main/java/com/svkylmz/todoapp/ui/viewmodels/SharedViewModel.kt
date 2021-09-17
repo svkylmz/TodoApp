@@ -1,4 +1,4 @@
-package com.svkylmz.todoapp.viewmodels
+package com.svkylmz.todoapp.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
