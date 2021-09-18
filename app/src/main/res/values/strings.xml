@@ -7,4 +7,6 @@
     <string name="search_icon">Search Icon</string>
     <string name="close_icon">Close Icon</string>
     <string name="search_placeholder">Search</string>
+    <string name="no_found_icon">No Found Icon</string>
+    <string name="empty_content">No Tasks Found</string>
 </resources>

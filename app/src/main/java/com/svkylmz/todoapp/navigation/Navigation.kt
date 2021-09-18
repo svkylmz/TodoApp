@@ -1,5 +1,6 @@
 package com.svkylmz.todoapp.navigation
 
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
@@ -9,6 +10,7 @@ import com.svkylmz.todoapp.navigation.destinations.taskComposable
 import com.svkylmz.todoapp.ui.viewmodels.SharedViewModel
 import com.svkylmz.todoapp.util.Constants.LIST_SCREEN
 
+@ExperimentalMaterialApi
 @Composable
 fun SetupNavigation(navController: NavHostController, sharedViewModel: SharedViewModel) {
     val screen = remember(navController) {
