@@ -16,11 +16,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import com.svkylmz.todoapp.data.models.TodoTask
 import com.svkylmz.todoapp.ui.theme.*
+import com.svkylmz.todoapp.util.RequestState
 
 @ExperimentalMaterialApi
 @Composable
 fun ListContent(
-    tasks: List<TodoTask>,
+    tasks: RequestState<List<TodoTask>>,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
     DisplayContent(
@@ -32,23 +33,25 @@ fun ListContent(
 @ExperimentalMaterialApi
 @Composable
 fun DisplayContent(
-    tasks: List<TodoTask>,
+    tasks: RequestState<List<TodoTask>>,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
-    if (tasks.isNotEmpty()) {
-        LazyColumn {
-            items(
-                items = tasks,
-                key = { task -> task.id }
-            ) { task ->
-                TaskItem(
-                    todoTask = task,
-                    navigateToTaskScreen = navigateToTaskScreen
-                )
+    if (tasks is RequestState.Success) {
+        if (tasks.data.isNotEmpty()) {
+            LazyColumn {
+                items(
+                    items = tasks.data,
+                    key = { task -> task.id }
+                ) { task ->
+                    TaskItem(
+                        todoTask = task,
+                        navigateToTaskScreen = navigateToTaskScreen
+                    )
+                }
             }
+        } else {
+            EmptyContent()
         }
-    } else {
-        EmptyContent()
     }
 }
 
