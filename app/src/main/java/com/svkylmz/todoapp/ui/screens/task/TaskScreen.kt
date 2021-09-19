@@ -2,15 +2,22 @@ package com.svkylmz.todoapp.ui.screens.task
 
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import com.svkylmz.todoapp.data.models.Priority
 import com.svkylmz.todoapp.data.models.TodoTask
+import com.svkylmz.todoapp.ui.viewmodels.SharedViewModel
 import com.svkylmz.todoapp.util.Action
 
 @Composable
 fun TaskScreen(
     selectedTask: TodoTask?,
+    sharedViewModel: SharedViewModel,
     navigateToListScreen: (Action) -> Unit
 ) {
+    val title: String by sharedViewModel.title
+    val description: String by sharedViewModel.description
+    val priority: Priority by sharedViewModel.priority
+
     Scaffold(
         topBar = {
             TaskAppBar(
@@ -20,12 +27,18 @@ fun TaskScreen(
         },
         content = {
             TaskContent(
-                title = "",
-                onTitleChange = {},
-                description = "",
-                onDescriptionChange = {},
-                priority = Priority.MEDIUM,
-                onPrioritySelected = {}
+                title = title,
+                onTitleChange = {
+                    sharedViewModel.title.value = it
+                },
+                description = description,
+                onDescriptionChange = {
+                    sharedViewModel.description.value = it
+                },
+                priority = priority,
+                onPrioritySelected = {
+                    sharedViewModel.priority.value = it
+                }
             )
         }
     )
