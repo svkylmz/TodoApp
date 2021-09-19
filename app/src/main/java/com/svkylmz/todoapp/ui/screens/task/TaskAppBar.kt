@@ -9,9 +9,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import com.svkylmz.todoapp.R
-import com.svkylmz.todoapp.data.models.Priority
 import com.svkylmz.todoapp.data.models.TodoTask
 import com.svkylmz.todoapp.ui.theme.topAppBarBackgroundColor
 import com.svkylmz.todoapp.ui.theme.topAppBarContentColor
@@ -19,9 +17,28 @@ import com.svkylmz.todoapp.util.Action
 
 @Composable
 fun TaskAppBar(
+    selectedTask: TodoTask?,
     navigateToListScreen: (Action) -> Unit
 ) {
-    NewTaskAppBar(navigateToListScreen = navigateToListScreen)
+    DisplayTaskAppBar(
+        selectedTask = selectedTask,
+        navigateToListScreen = navigateToListScreen
+    )
+}
+
+@Composable
+fun DisplayTaskAppBar(
+    selectedTask: TodoTask?,
+    navigateToListScreen: (Action) -> Unit
+) {
+    if (selectedTask == null) {
+        NewTaskAppBar(navigateToListScreen = navigateToListScreen)
+    } else {
+        ExistingTaskAppBar(
+            selectedTask = selectedTask,
+            navigateToListScreen = navigateToListScreen
+        )
+    }
 }
 
 @Composable
@@ -133,24 +150,4 @@ fun UpdateAction(
             tint = MaterialTheme.colors.topAppBarContentColor
         )
     }
-}
-
-@Preview
-@Composable
-fun NewTaskAppBarPreview() {
-    NewTaskAppBar(navigateToListScreen = {})
-}
-
-@Preview
-@Composable
-fun ExistingTaskAppBarPreview() {
-    ExistingTaskAppBar(
-        selectedTask = TodoTask(
-            0,
-            "existing title",
-            "random existing description",
-            Priority.LOW
-        ),
-        navigateToListScreen = {}
-    )
 }
