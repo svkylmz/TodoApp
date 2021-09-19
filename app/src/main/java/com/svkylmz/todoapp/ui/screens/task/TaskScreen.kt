@@ -2,6 +2,7 @@ package com.svkylmz.todoapp.ui.screens.task
 
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import com.svkylmz.todoapp.data.models.Priority
 import com.svkylmz.todoapp.data.models.TodoTask
 import com.svkylmz.todoapp.util.Action
 
@@ -17,6 +18,15 @@ fun TaskScreen(
                 navigateToListScreen = navigateToListScreen
             )
         },
-        content = {}
+        content = {
+            TaskContent(
+                title = "",
+                onTitleChange = {},
+                description = "",
+                onDescriptionChange = {},
+                priority = Priority.MEDIUM,
+                onPrioritySelected = {}
+            )
+        }
     )
 }
