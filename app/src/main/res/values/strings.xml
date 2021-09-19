@@ -9,4 +9,6 @@
     <string name="search_placeholder">Search</string>
     <string name="no_found_icon">No Found Icon</string>
     <string name="empty_content">No Tasks Found</string>
+    <string name="back_action">Back Arrow</string>
+    <string name="add_action">Add Task</string>
 </resources>
