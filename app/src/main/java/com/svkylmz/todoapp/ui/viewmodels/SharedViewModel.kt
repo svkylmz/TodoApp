@@ -91,6 +91,7 @@ class SharedViewModel @Inject constructor(private val repository: TodoRepository
             )
             repository.addTask(todoTask = todoTask)
         }
+        searchAppBarState.value = SearchAppBarState.CLOSED
     }
 
     private fun updateTask() {
@@ -115,6 +116,24 @@ class SharedViewModel @Inject constructor(private val repository: TodoRepository
             )
             repository.deleteTask(todoTask = todoTask)
         }
+    }
+
+    private val _searchedTasks = MutableStateFlow<RequestState<List<TodoTask>>>(RequestState.Idle)
+    val searchedTasks: StateFlow<RequestState<List<TodoTask>>> = _searchedTasks
+
+    fun searchDatabase(searchQuery: String) {
+        _searchedTasks.value = RequestState.Loading
+        try {
+            viewModelScope.launch {
+                repository.searchDatabase(searchQuery = "%$searchQuery%") //Finds any values that have written letters in any position
+                    .collect { searchedTasks ->
+                        _searchedTasks.value = RequestState.Success(searchedTasks)
+                }
+            }
+        } catch (e: Exception) {
+            _searchedTasks.value = RequestState.Error(e)
+        }
+        searchAppBarState.value = SearchAppBarState.TRIGGERED
     }
 
     fun handleDatabaseAction(action: Action) {

@@ -23,6 +23,7 @@ fun ListScreen(
     val searchTextState: String by sharedViewModel.searchTextState
 
     val allTasks by sharedViewModel.allTasks.collectAsState() //observe Flow from the composable function
+    val searchedTasks by sharedViewModel.searchedTasks.collectAsState()
 
     LaunchedEffect(key1 = true) {
         sharedViewModel.getAllTasks()
@@ -46,10 +47,13 @@ fun ListScreen(
                 sharedViewModel = sharedViewModel,
                 searchAppBarState = searchAppBarState,
                 searchTextState = searchTextState
-            ) },
+            )
+        },
         content = {
             ListContent(
-                tasks = allTasks,   // "by" keyword converts allTasks from State to List type
+                allTasks = allTasks,   // "by" keyword converts allTasks from State to List type,
+                searchedTasks = searchedTasks,
+                searchAppBarState = searchAppBarState,
                 navigateToTaskScreen = navigateToTaskScreen
             )
         },

@@ -17,15 +17,20 @@ import androidx.compose.ui.text.style.TextOverflow
 import com.svkylmz.todoapp.data.models.TodoTask
 import com.svkylmz.todoapp.ui.theme.*
 import com.svkylmz.todoapp.util.RequestState
+import com.svkylmz.todoapp.util.SearchAppBarState
 
 @ExperimentalMaterialApi
 @Composable
 fun ListContent(
-    tasks: RequestState<List<TodoTask>>,
+    allTasks: RequestState<List<TodoTask>>,
+    searchedTasks: RequestState<List<TodoTask>>,
+    searchAppBarState: SearchAppBarState,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
     DisplayContent(
-        tasks = tasks,
+        allTasks = allTasks,
+        searchedTasks = searchedTasks,
+        searchAppBarState = searchAppBarState,
         navigateToTaskScreen = navigateToTaskScreen
     )
 }
@@ -33,25 +38,48 @@ fun ListContent(
 @ExperimentalMaterialApi
 @Composable
 fun DisplayContent(
-    tasks: RequestState<List<TodoTask>>,
+    allTasks: RequestState<List<TodoTask>>,
+    searchedTasks: RequestState<List<TodoTask>>,
+    searchAppBarState: SearchAppBarState,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
-    if (tasks is RequestState.Success) {
-        if (tasks.data.isNotEmpty()) {
-            LazyColumn {
-                items(
-                    items = tasks.data,
-                    key = { task -> task.id }
-                ) { task ->
-                    TaskItem(
-                        todoTask = task,
-                        navigateToTaskScreen = navigateToTaskScreen
-                    )
-                }
-            }
-        } else {
-            EmptyContent()
+    if (searchAppBarState == SearchAppBarState.TRIGGERED) {
+        if (searchedTasks is RequestState.Success) {
+            HandleListContent(
+                tasks = searchedTasks.data,
+                navigateToTaskScreen = navigateToTaskScreen
+            )
         }
+    } else {
+        if (allTasks is RequestState.Success) {
+            HandleListContent(
+                tasks = allTasks.data,
+                navigateToTaskScreen = navigateToTaskScreen
+            )
+        }
+    }
+}
+
+@ExperimentalMaterialApi
+@Composable
+fun HandleListContent(
+    tasks: List<TodoTask>,
+    navigateToTaskScreen: (taskId: Int) -> Unit
+) {
+    if (tasks.isNotEmpty()) {
+        LazyColumn {
+            items(
+                items = tasks,
+                key = { task -> task.id }
+            ) { task ->
+                TaskItem(
+                    todoTask = task,
+                    navigateToTaskScreen = navigateToTaskScreen
+                )
+            }
+        }
+    } else {
+        EmptyContent()
     }
 }
 
