@@ -3,16 +3,15 @@ package com.svkylmz.todoapp.ui.screens.list
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.svkylmz.todoapp.R
 import com.svkylmz.todoapp.ui.theme.fabBackgroundColor
 import com.svkylmz.todoapp.ui.viewmodels.SharedViewModel
 import com.svkylmz.todoapp.util.SearchAppBarState
-import androidx.compose.runtime.getValue
+import com.svkylmz.todoapp.util.Action
+import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi
 @Composable
@@ -30,9 +29,17 @@ fun ListScreen(
     }
 
     val action by sharedViewModel.action
-    sharedViewModel.handleDatabaseAction(action = action)
+    val scaffoldState = rememberScaffoldState()
+    
+    DisplaySnackBar(
+        scaffoldState = scaffoldState,
+        handleDatabaseActions = { sharedViewModel.handleDatabaseAction(action = action) },
+        taskTitle = sharedViewModel.title.value,
+        action = action
+    )
 
     Scaffold(
+        scaffoldState = scaffoldState,  //snack bar is invisible without this parameter
         topBar = {
             ListAppBar(
                 sharedViewModel = sharedViewModel,
@@ -62,5 +69,27 @@ fun ListFab(onFabClicked: (taskId: Int) -> Unit) {
             contentDescription = stringResource(id = R.string.add_button),
             tint = Color.White
         )
+    }
+}
+
+@Composable
+fun DisplaySnackBar(
+    scaffoldState: ScaffoldState,
+    handleDatabaseActions: () -> Unit,
+    taskTitle: String,
+    action: Action
+) {
+    handleDatabaseActions()
+    
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(key1 = action) {
+        if (action != Action.NO_ACTION) {
+            scope.launch {
+                val snackBarResult = scaffoldState.snackbarHostState.showSnackbar(
+                    message = "${action.name}: $taskTitle",
+                    actionLabel = "Ok"
+                )
+            }
+        }
     }
 }
