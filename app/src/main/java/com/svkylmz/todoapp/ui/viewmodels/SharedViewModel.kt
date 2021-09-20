@@ -7,10 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.svkylmz.todoapp.data.models.Priority
 import com.svkylmz.todoapp.data.models.TodoTask
 import com.svkylmz.todoapp.data.repositories.TodoRepository
+import com.svkylmz.todoapp.util.Action
 import com.svkylmz.todoapp.util.Constants.MAX_TITLE_LENGTH
 import com.svkylmz.todoapp.util.RequestState
 import com.svkylmz.todoapp.util.SearchAppBarState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -76,5 +78,30 @@ class SharedViewModel @Inject constructor(private val repository: TodoRepository
 
     fun validateFields(): Boolean {
         return title.value.isNotEmpty() && description.value.isNotEmpty()
+    }
+
+    val action: MutableState<Action> = mutableStateOf(Action.NO_ACTION)
+
+    private fun addTask() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val todoTask = TodoTask(
+                title = title.value,
+                priority = priority.value,
+                description = description.value
+            )
+            repository.addTask(todoTask = todoTask)
+        }
+    }
+
+    fun handleDatabaseAction(action: Action) {
+        when(action) {
+            Action.ADD -> { addTask() }
+            Action.UPDATE -> {  }
+            Action.DELETE -> {  }
+            Action.DELETE_ALL -> {  }
+            Action.UNDO -> {  }
+            else -> {  }
+        }
+        this.action.value = Action.NO_ACTION
     }
 }

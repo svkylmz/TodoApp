@@ -29,6 +29,9 @@ fun ListScreen(
         sharedViewModel.getAllTasks()
     }
 
+    val action by sharedViewModel.action
+    sharedViewModel.handleDatabaseAction(action = action)
+
     Scaffold(
         topBar = {
             ListAppBar(
