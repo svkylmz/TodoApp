@@ -137,7 +137,7 @@ class SharedViewModel @Inject constructor(private val repository: TodoRepository
     }
 
     private fun deleteAllTasks() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.deleteAllTasks()
         }
     }
