@@ -25,8 +25,13 @@ fun ListScreen(
     val allTasks by sharedViewModel.allTasks.collectAsState() //observe Flow from the composable function
     val searchedTasks by sharedViewModel.searchedTasks.collectAsState()
 
+    val sortState by sharedViewModel.sortState.collectAsState()
+    val lowPriorityTasks by sharedViewModel.lowPriorityTasks.collectAsState()
+    val highPriorityTasks by sharedViewModel.highPriorityTasks.collectAsState()
+
     LaunchedEffect(key1 = true) {
         sharedViewModel.getAllTasks()
+        sharedViewModel.readSortState()
     }
 
     val action by sharedViewModel.action
@@ -53,6 +58,9 @@ fun ListScreen(
             ListContent(
                 allTasks = allTasks,   // "by" keyword converts allTasks from State to List type,
                 searchedTasks = searchedTasks,
+                lowPriorityTasks = lowPriorityTasks,
+                highPriorityTasks = highPriorityTasks,
+                sortState = sortState,
                 searchAppBarState = searchAppBarState,
                 navigateToTaskScreen = navigateToTaskScreen
             )

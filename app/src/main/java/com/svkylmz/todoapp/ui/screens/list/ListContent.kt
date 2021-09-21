@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import com.svkylmz.todoapp.data.models.Priority
 import com.svkylmz.todoapp.data.models.TodoTask
 import com.svkylmz.todoapp.ui.theme.*
 import com.svkylmz.todoapp.util.RequestState
@@ -24,12 +25,18 @@ import com.svkylmz.todoapp.util.SearchAppBarState
 fun ListContent(
     allTasks: RequestState<List<TodoTask>>,
     searchedTasks: RequestState<List<TodoTask>>,
+    lowPriorityTasks: List<TodoTask>,
+    highPriorityTasks: List<TodoTask>,
+    sortState: RequestState<Priority>,
     searchAppBarState: SearchAppBarState,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
     DisplayContent(
         allTasks = allTasks,
         searchedTasks = searchedTasks,
+        lowPriorityTasks = lowPriorityTasks,
+        highPriorityTasks = highPriorityTasks,
+        sortState = sortState,
         searchAppBarState = searchAppBarState,
         navigateToTaskScreen = navigateToTaskScreen
     )
@@ -40,22 +47,42 @@ fun ListContent(
 fun DisplayContent(
     allTasks: RequestState<List<TodoTask>>,
     searchedTasks: RequestState<List<TodoTask>>,
+    lowPriorityTasks: List<TodoTask>,
+    highPriorityTasks: List<TodoTask>,
+    sortState: RequestState<Priority>,
     searchAppBarState: SearchAppBarState,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
-    if (searchAppBarState == SearchAppBarState.TRIGGERED) {
-        if (searchedTasks is RequestState.Success) {
-            HandleListContent(
-                tasks = searchedTasks.data,
-                navigateToTaskScreen = navigateToTaskScreen
-            )
-        }
-    } else {
-        if (allTasks is RequestState.Success) {
-            HandleListContent(
-                tasks = allTasks.data,
-                navigateToTaskScreen = navigateToTaskScreen
-            )
+    if (sortState is RequestState.Success) {
+        when {
+            searchAppBarState == SearchAppBarState.TRIGGERED -> {
+                if (searchedTasks is RequestState.Success) {
+                    HandleListContent(
+                            tasks = searchedTasks.data,
+                            navigateToTaskScreen = navigateToTaskScreen
+                    )
+                }
+            }
+            sortState.data == Priority.NONE -> {
+                if (allTasks is RequestState.Success) {
+                    HandleListContent(
+                            tasks = allTasks.data,
+                            navigateToTaskScreen = navigateToTaskScreen
+                    )
+                }
+            }
+            sortState.data == Priority.LOW -> {
+                HandleListContent(
+                        tasks = lowPriorityTasks,
+                        navigateToTaskScreen = navigateToTaskScreen
+                )
+            }
+            sortState.data == Priority.HIGH -> {
+                HandleListContent(
+                        tasks = highPriorityTasks,
+                        navigateToTaskScreen = navigateToTaskScreen
+                )
+            }
         }
     }
 }
