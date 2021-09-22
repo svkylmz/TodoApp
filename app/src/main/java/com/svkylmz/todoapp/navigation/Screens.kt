@@ -11,12 +11,12 @@ class Screens(navController: NavHostController) {
             popUpTo(SPLASH_SCREEN) { inclusive = true }
         }
     }
-    val list: (Action) -> Unit = { action ->
+    val list: (Int) -> Unit = { taskId ->
+        navController.navigate(route = "task/${taskId}")
+    }
+    val task: (Action) -> Unit = { action ->
         navController.navigate(route = "list/${action.name}") {
             popUpTo(LIST_SCREEN) { inclusive = true }
         }
-    }
-    val task: (Int) -> Unit = { taskId ->
-        navController.navigate(route = "task/${taskId}")
     }
 }
