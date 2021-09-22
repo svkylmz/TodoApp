@@ -7,20 +7,25 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.svkylmz.todoapp.R
 import com.svkylmz.todoapp.ui.theme.SPLASH_LOGO_HEIGHT
-import com.svkylmz.todoapp.ui.theme.TodoAppTheme
 import com.svkylmz.todoapp.ui.theme.splashScreenBackgroundColor
 import com.svkylmz.todoapp.ui.theme.splashScreenContentColor
+import com.svkylmz.todoapp.util.Constants.SPLASH_SCREEN_DELAY
+import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen() {
+fun SplashScreen(navigateToListScreen: () -> Unit) {
+    LaunchedEffect(key1 = true) {
+        delay(SPLASH_SCREEN_DELAY)  //show the splash screen for 3 seconds
+        navigateToListScreen()
+    }
     Box(
         modifier = Modifier
                 .fillMaxSize()
@@ -33,13 +38,5 @@ fun SplashScreen() {
             contentDescription = stringResource(id = R.string.todo_logo),
             colorFilter = ColorFilter.tint(MaterialTheme.colors.splashScreenContentColor)
         )
-    }
-}
-
-@Preview
-@Composable
-private fun SplashScreenPreview() {
-    TodoAppTheme(darkTheme = false) {
-        SplashScreen()
     }
 }

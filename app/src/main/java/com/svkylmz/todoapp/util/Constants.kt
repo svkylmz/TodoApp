@@ -4,6 +4,7 @@ object Constants {
     const val DATABASE_NAME = "todo_database"
     const val DATABASE_TABLE = "todo_table"
 
+    const val SPLASH_SCREEN = "splash"
     const val LIST_SCREEN = "list/{action}" // "route_name/argument"
     const val TASK_SCREEN = "task/{taskId}"
 
@@ -14,4 +15,6 @@ object Constants {
 
     const val PREFERENCE_NAME = "todo_preferences"
     const val PREFERENCE_KEY = "sort_state"
+
+    const val SPLASH_SCREEN_DELAY = 3000L
 }
