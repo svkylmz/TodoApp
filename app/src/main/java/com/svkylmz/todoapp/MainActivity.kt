@@ -14,12 +14,12 @@ import com.svkylmz.todoapp.ui.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
+@ExperimentalAnimationApi
+@ExperimentalMaterialApi
 class MainActivity : ComponentActivity() {
     private lateinit var navController: NavHostController
     private val sharedViewModel: SharedViewModel by viewModels()
 
-    @ExperimentalAnimationApi
-    @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
