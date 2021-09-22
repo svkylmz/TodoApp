@@ -1,5 +1,6 @@
 package com.svkylmz.todoapp.navigation
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -10,6 +11,7 @@ import com.svkylmz.todoapp.navigation.destinations.taskComposable
 import com.svkylmz.todoapp.ui.viewmodels.SharedViewModel
 import com.svkylmz.todoapp.util.Constants.LIST_SCREEN
 
+@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
 fun SetupNavigation(navController: NavHostController, sharedViewModel: SharedViewModel) {

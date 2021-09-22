@@ -1,5 +1,6 @@
 package com.svkylmz.todoapp.ui.screens.list
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -7,12 +8,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.svkylmz.todoapp.R
+import com.svkylmz.todoapp.data.models.TodoTask
 import com.svkylmz.todoapp.ui.theme.fabBackgroundColor
 import com.svkylmz.todoapp.ui.viewmodels.SharedViewModel
 import com.svkylmz.todoapp.util.SearchAppBarState
 import com.svkylmz.todoapp.util.Action
 import kotlinx.coroutines.launch
 
+@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
 fun ListScreen(
@@ -58,6 +61,10 @@ fun ListScreen(
             ListContent(
                 allTasks = allTasks,   // "by" keyword converts allTasks from State to List type,
                 searchedTasks = searchedTasks,
+                onSwipeToDelete = { action, task ->
+                    sharedViewModel.action.value = action
+                    sharedViewModel.updateSelectedTaskFields(selectedTask = task)
+                },
                 lowPriorityTasks = lowPriorityTasks,
                 highPriorityTasks = highPriorityTasks,
                 sortState = sortState,
