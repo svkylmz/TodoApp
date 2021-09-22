@@ -18,6 +18,14 @@ val LightGray = Color(0xFFFCFCFC)
 val MediumGray = Color(0xFF9C9C9C)
 val DarkGray = Color(0xFF242424)
 
+val Colors.splashScreenBackgroundColor: Color
+    @Composable
+    get() = if (isLight) Purple500 else DarkGray
+
+val Colors.splashScreenContentColor: Color
+    @Composable
+    get() = if (isLight) DarkGray else MediumGray
+
 val Colors.taskItemBackgroundColor: Color
     @Composable
     get() = if (isLight) LightGray else Color.Transparent
